@@ -1,5 +1,17 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { Roles } from 'src/decorators/role.decorator';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { UserService } from './user.service';
 
 @ApiTags('Users')
@@ -7,27 +19,29 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiOkResponse()
+  @ApiBearerAuth()
+  @Roles('user')
   @Get(':userId')
-  getUser() {
-    return this.userService.getUser();
+  @UseGuards(AuthGuard)
+  async getUser(@Param('userId') userId: string) {
+    return await this.userService.getUser(userId);
   }
 
-  @ApiCreatedResponse({
-    description: 'The record has been successfully created.',
-  })
   @Post('add')
-  addAuthor() {
-    return this.userService.addUser();
+  async addAuthor(@Body() createUserDto: CreateUserDto) {
+    return await this.userService.addUser(createUserDto);
   }
 
   @Put('updated/:userId')
-  updateUserById() {
-    return this.userService.updateUserById();
+  async updateUserById(
+    @Param('userId') userId: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.userService.updateUserById(userId, updateUserDto);
   }
 
   @Delete('delete/:userId')
-  deleteUserById() {
-    return this.userService.deleteUserById();
+  async deleteUserById(@Param('userId') userId: string) {
+    return await this.userService.deleteUserById(userId);
   }
 }

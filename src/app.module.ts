@@ -1,3 +1,4 @@
+import { MongooseModule } from '@nestjs/mongoose';
 import { Module, CacheModule } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { AppController } from './app.controller';
@@ -15,6 +16,9 @@ import { redisProvider } from './providers/redis/redis.provider';
       load: [configuration],
     }),
     CacheModule.register<RedisClientOptions>(...redisProvider),
+    MongooseModule.forRoot(process.env.DB_URL, {
+      connectionName: 'library',
+    }),
     UserModule,
     RouterModule.register([
       {
