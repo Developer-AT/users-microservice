@@ -10,6 +10,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/');
 
   const configService = app.get(ConfigService);
+  console.log(configService.get<string>('PORT'));
 
   app.connectMicroservice<MicroserviceOptions>(
     {
