@@ -4,8 +4,7 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModelName, UserSchema } from 'src/schemas/user.schema';
-import { AuthGrpcModule } from 'src/providers/grpc/auth/auth.grpc.module';
-import { BookGrpcModule } from 'src/providers/grpc/book/book.grpc.module';
+import { GrpcModule } from 'src/providers/grpc/grpc.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -13,8 +12,7 @@ import { BookGrpcModule } from 'src/providers/grpc/book/book.grpc.module';
       [{ name: UserModelName, schema: UserSchema }],
       'library',
     ),
-    AuthGrpcModule,
-    BookGrpcModule,
+    GrpcModule
   ],
   controllers: [UserController],
   providers: [UserService],
