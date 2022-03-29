@@ -4,7 +4,7 @@ import { join } from 'path';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthProvider } from './auth/auth.provider';
 import { BookProvider } from './book/book.provider';
-console.log(__dirname);
+
 @Module({
   imports: [
     ConfigModule.forRoot(),

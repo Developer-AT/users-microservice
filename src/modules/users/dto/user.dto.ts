@@ -8,8 +8,8 @@ export class CreateUserDto {
 
   @ApiProperty({ type: String, required: true, minLength: 8 })
   @IsString()
-  @MinLength(8,{
-    message: 'Password is too short. Minimal length is $constraint1 characters'
+  @MinLength(8, {
+    message: 'Password is too short. Minimal length is $constraint1 characters',
   })
   password: number;
 

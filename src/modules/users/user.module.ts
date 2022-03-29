@@ -5,6 +5,7 @@ import { UserService } from './user.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModelName, UserSchema } from 'src/schemas/user.schema';
 import { GrpcModule } from 'src/providers/grpc/grpc.module';
+import { RedisModule } from 'src/providers/redis/redis.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -12,7 +13,8 @@ import { GrpcModule } from 'src/providers/grpc/grpc.module';
       [{ name: UserModelName, schema: UserSchema }],
       'library',
     ),
-    GrpcModule
+    GrpcModule,
+    RedisModule,
   ],
   controllers: [UserController],
   providers: [UserService],
