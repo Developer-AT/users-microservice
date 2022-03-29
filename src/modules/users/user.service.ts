@@ -10,7 +10,7 @@ export class UserService {
     @InjectModel(UserModelName) private userModel: Model<UserDocument>,
   ) {}
 
-  async getUser(userId: string) {
+  async getUserById(userId: string) {
     return await this.userModel.findById(userId);
   }
 
