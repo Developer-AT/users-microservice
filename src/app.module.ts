@@ -8,23 +8,23 @@ import { UserModule } from './modules/users/user.module';
 import configuration from 'config/configuration';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [configuration],
-    }),
-    MongooseModule.forRoot(process.env.DB_URL, {
-      connectionName: 'library',
-    }),
-    UserModule,
-    RouterModule.register([
-      {
-        path: 'user',
-        module: UserModule,
-      },
-    ]),
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+            load: [configuration],
+        }),
+        MongooseModule.forRoot(process.env.DB_URL, {
+            connectionName: 'library',
+        }),
+        UserModule,
+        RouterModule.register([
+            {
+                path: 'user',
+                module: UserModule,
+            },
+        ]),
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}
