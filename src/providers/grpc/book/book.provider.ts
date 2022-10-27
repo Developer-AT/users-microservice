@@ -3,10 +3,10 @@ import { ClientGrpc } from '@nestjs/microservices';
 
 @Injectable()
 export class BookProvider implements OnModuleInit {
-  private bookService;
+    private bookService;
 
-  constructor(@Inject('BOOK_PACKAGE') private client: ClientGrpc) {}
-  onModuleInit() {
-    this.bookService = this.client.getService('BookService');
-  }
+    constructor(@Inject('BOOK_PACKAGE') private client: ClientGrpc) {}
+    onModuleInit() {
+        this.bookService = this.client.getService('BookService');
+    }
 }

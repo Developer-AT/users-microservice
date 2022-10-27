@@ -7,17 +7,17 @@ import { UserModelName, UserSchema } from 'src/schemas/user.schema';
 import { GrpcModule } from 'src/providers/grpc/grpc.module';
 import { RedisModule } from 'src/providers/redis/redis.module';
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    MongooseModule.forFeature(
-      [{ name: UserModelName, schema: UserSchema }],
-      'library',
-    ),
-    GrpcModule,
-    RedisModule,
-  ],
-  controllers: [UserController],
-  providers: [UserService],
+    imports: [
+        ConfigModule.forRoot(),
+        MongooseModule.forFeature(
+            [{ name: UserModelName, schema: UserSchema }],
+            'library',
+        ),
+        GrpcModule,
+        RedisModule,
+    ],
+    controllers: [UserController],
+    providers: [UserService],
 })
 // {
 //   provide: APP_GUARD,
