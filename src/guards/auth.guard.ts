@@ -1,12 +1,12 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { firstValueFrom, Observable } from 'rxjs';
+import { ClientType } from 'src/interfaces/enums';
+import { ValidateToken } from 'src/providers/grpc/auth/auth.interface';
 import { AuthProvider } from 'src/providers/grpc/auth/auth.provider';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    private authService;
-
     constructor(
         private reflector: Reflector,
         private readonly authprovider: AuthProvider,
@@ -25,11 +25,11 @@ export class AuthGuard implements CanActivate {
     }
 
     validate(token, roles): Promise<object> {
-        return firstValueFrom(
-            this.authprovider.validate({
-                token: token,
-                roles: roles,
-            }),
-        );
+        const dataToValidate: ValidateToken = {
+            token: token,
+            roles: roles,
+            clientType: ClientType.USER,
+        };
+        return firstValueFrom(this.authprovider.validate(dataToValidate));
     }
 }

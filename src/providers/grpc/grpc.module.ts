@@ -4,6 +4,7 @@ import { join } from 'path';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthProvider } from './auth/auth.provider';
 import { BookProvider } from './book/book.provider';
+import { JwtModule } from './../jwt/jwt.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { BookProvider } from './book/book.provider';
                 },
             },
         ]),
+        JwtModule,
     ],
     providers: [AuthProvider, BookProvider],
     exports: [AuthProvider, BookProvider],

@@ -4,12 +4,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument, UserModelName } from 'src/schemas/user.schema';
 import { RedisProvider } from 'src/providers/redis/redis.provider';
+import { AuthProvider } from 'src/providers/grpc/auth/auth.provider';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectModel(UserModelName) private userModel: Model<UserDocument>,
         private readonly redis: RedisProvider,
+        private readonly authprovider: AuthProvider,
     ) {}
 
     async getUserById(userId: string) {
@@ -24,7 +26,7 @@ export class UserService {
         }
     }
 
-    async addUser(createUserDto: CreateUserDto) {
+    async createUser(createUserDto: CreateUserDto) {
         const user = new this.userModel(createUserDto);
         const result = await user.save();
         console.log(result);
