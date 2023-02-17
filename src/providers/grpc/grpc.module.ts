@@ -1,3 +1,4 @@
+import { UtilsModule } from 'src/providers/utils/utils.module';
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { join } from 'path';
@@ -30,6 +31,7 @@ import { JwtModule } from './../jwt/jwt.module';
             },
         ]),
         JwtModule,
+        UtilsModule,
     ],
     providers: [AuthProvider, BookProvider],
     exports: [AuthProvider, BookProvider],

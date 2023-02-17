@@ -4,12 +4,14 @@ import {
     UpdateUserRole,
     ValidateToken,
 } from './auth.interface';
-import { Observable } from 'rxjs';
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { Observable, firstValueFrom } from 'rxjs';
+import { Inject, Injectable, OnModuleInit, UsePipes } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Metadata } from '@grpc/grpc-js';
 import { JwtProvider } from 'src/providers/jwt/jwt.provider';
 import { ServiceType } from 'src/interfaces/enums';
+import { GRpcResponse, HttpResponse } from 'src/interfaces/global.interface';
+import { ResponseUtilsProvider } from 'src/providers/utils/response.utils.provider';
 
 @Injectable()
 export class AuthProvider implements OnModuleInit {
@@ -20,6 +22,7 @@ export class AuthProvider implements OnModuleInit {
     constructor(
         @Inject('AUTH_PACKAGE') private client: ClientGrpc,
         private readonly jwt: JwtProvider,
+        private readonly responseHandler: ResponseUtilsProvider,
     ) {
         this.metaData = new Metadata();
         this.metaData.set('service', ServiceType.USER);
@@ -29,24 +32,58 @@ export class AuthProvider implements OnModuleInit {
         this.userService = this.client.getService('UserService');
     }
 
-    validate(payload: ValidateToken): Observable<object> {
-        this.setToken();
-        return this.authService.Validate(payload, this.metaData);
+    async validate(payload: ValidateToken): Promise<HttpResponse> {
+        try {
+            this.setToken();
+            const res = <GRpcResponse>(
+                await firstValueFrom(
+                    this.authService.Validate(payload, this.metaData),
+                )
+            );
+            console.log('Auth--Service--validate--res', res);
+            return this.responseHandler.gRpcRsponseHandler(res);
+        } catch (error) {
+            console.error('Auth--Service--validate--Error', error);
+            throw error;
+        }
     }
 
-    createUser(payload: CreateUser): Observable<object> {
-        this.setToken();
-        return this.userService.Create(payload, this.metaData);
+    async createUser(payload: CreateUser): Promise<HttpResponse> {
+        try {
+            this.setToken();
+            const res = <GRpcResponse>(
+                await firstValueFrom(
+                    this.userService.Create(payload, this.metaData),
+                )
+            );
+            console.log('Auth--Service--createUser--res', res);
+            return this.responseHandler.gRpcRsponseHandler(res);
+        } catch (error) {
+            console.error('Auth--Service--createUser--Error', error);
+            throw error;
+        }
     }
 
-    updateUserRole(payload: UpdateUserRole): Observable<object> {
+    async updateUserRole(payload: UpdateUserRole): Promise<GRpcResponse> {
         this.setToken();
-        return this.userService.UpdateRole(payload, this.metaData);
+        return await firstValueFrom(
+            this.userService.UpdateRole(payload, this.metaData),
+        );
     }
 
-    generateToken(payload: GenerateToken): Observable<object> {
-        this.setToken();
-        return this.userService.GenerateToken(payload, this.metaData);
+    async generateToken(payload: GenerateToken): Promise<HttpResponse> {
+        try {
+            this.setToken();
+            const res = <GRpcResponse>(
+                await firstValueFrom(
+                    this.userService.GenerateToken(payload, this.metaData),
+                )
+            );
+            return this.responseHandler.gRpcRsponseHandler(res);
+        } catch (error) {
+            console.error('Auth--Service--generateToken--Error', error);
+            throw error;
+        }
     }
 
     setToken() {
