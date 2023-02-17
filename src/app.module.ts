@@ -13,16 +13,7 @@ import configuration from 'config/configuration';
             isGlobal: true,
             load: [configuration],
         }),
-        MongooseModule.forRoot(process.env.DB_URL, {
-            connectionName: 'library',
-        }),
         UserModule,
-        RouterModule.register([
-            {
-                path: 'user',
-                module: UserModule,
-            },
-        ]),
     ],
     controllers: [AppController],
     providers: [AppService],
