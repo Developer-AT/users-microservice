@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import {
     UpdateUserDto,
     CreateUserDto,
@@ -14,25 +15,37 @@ import {
 } from 'src/providers/grpc/auth/auth.interface';
 import { UserEntity } from 'src/entity/user.entity';
 import { UserRole } from 'src/interfaces/enums';
+import { ProducerService } from 'src/providers/kafka/producer.service';
 
 @Injectable()
 export class UserService {
     constructor(
+        private readonly config: ConfigService,
         private readonly userEntity: UserEntity,
         private readonly redis: RedisProvider,
         private readonly authprovider: AuthProvider,
+        private readonly producerService: ProducerService,
     ) {}
 
     async getUserById(userId: string) {
         const userFromRedis = await this.redis.get(userId);
         console.log(`userFromRedis :: ${userFromRedis}`);
+        let user;
         if (userFromRedis) {
-            return JSON.parse(userFromRedis);
+            user = JSON.parse(userFromRedis);
         } else {
-            const user = await this.userEntity.getDataById(userId);
+            user = await this.userEntity.getDataById(userId);
             if (user) this.redis.set(userId, JSON.stringify(user), 5000);
-            return user;
         }
+
+        const topic = this.config.get<string>('kafka.topics.logging');
+        const message = {
+            value: JSON.stringify(user),
+        };
+        console.log('kafka Topic:', topic, 'message:: ', message);
+        this.producerService.produce(topic, message);
+
+        return user;
     }
 
     async createUser(createUserDto: CreateUserDto) {
@@ -63,7 +76,14 @@ export class UserService {
             keycloakId: keycloakUserData.data.id,
         };
         delete dataToSave.password;
-        return await this.userEntity.createUser(dataToSave);
+        const user = await this.userEntity.createUser(dataToSave);
+        this.producerService.produce(
+            this.config.get<string>('kafka.topics.logging'),
+            {
+                value: JSON.stringify(user),
+            },
+        );
+        return user;
     }
 
     async updateUserById(userId: string, updateUserDto: UpdateUserDto) {
