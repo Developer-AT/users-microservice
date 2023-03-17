@@ -131,9 +131,9 @@ export class JwtProvider {
                     );
                     break;
 
-                case ServiceType.BOOK:
+                case ServiceType.PRODUCT:
                     key = this.configService.get<string>(
-                        'service.keys.public.book',
+                        'service.keys.public.product',
                     );
                     break;
 

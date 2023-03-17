@@ -1,5 +1,5 @@
 export default () => ({
-    database: {
-      library: process.env.DB_URL
+    identity: {
+      	user: process.env.DB_URL
     }
-  });
+});

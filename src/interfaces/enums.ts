@@ -1,6 +1,6 @@
 export enum ServiceType {
     AUTH = 'auth',
-    BOOK = 'book',
+    PRODUCT = 'product',
     USER = 'user',
 }
 
@@ -12,6 +12,11 @@ export enum UserRole {
 
 export enum ClientType {
     USER = 'user',
+}
+
+export enum UserType {
+    BASIC = 'basic',
+    AUTHOR = 'author',
 }
 
 export enum AuthStrategy {

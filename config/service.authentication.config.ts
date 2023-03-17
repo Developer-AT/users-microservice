@@ -9,7 +9,7 @@ export default () => ({
             public: {
                 auth: process.env.PUBLIC_KEY_AUTH,
                 user: process.env.PUBLIC_KEY_USER,
-                book: process.env.PUBLIC_KEY_BOOK
+                product: process.env.PUBLIC_KEY_PRODUCT
             }
         }
     }
