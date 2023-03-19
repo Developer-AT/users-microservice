@@ -1,4 +1,6 @@
-import { ClientType, UserRole } from 'src/interfaces/enums';
+import { MicroserviceGuard } from 'src/guards/microservice.guard';
+import { GrpcMethod } from '@nestjs/microservices';
+import { ClientType, ServiceType, UserRole } from 'src/interfaces/enums';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AccessBy, HavingRole } from 'src/decorators/access-control.decorator';
 import {
@@ -10,16 +12,28 @@ import {
     Post,
     Put,
     UseGuards,
+    UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto, UpdateUserDto, UserAuthDto } from './dto/user.dto';
+import {
+    CreateUserDto,
+    UpdateUserDto,
+    UserAuthDto,
+    GrpcGetUserPayload,
+} from './dto/user.dto';
 import { UserService } from './user.service';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
+import { Metadata, ServerUnaryCall } from '@grpc/grpc-js';
+import { ResponseUtilsProvider } from 'src/providers/utils/response.utils.provider';
+import { GRpcTransformInterceptor } from 'src/interceptors/grpc-response.interceptor';
 
 @ApiTags('Users')
 @Controller('user')
 export class UserController {
-    constructor(private readonly userService: UserService) {}
+    constructor(
+        private readonly userService: UserService,
+        private readonly responseUtils: ResponseUtilsProvider,
+    ) {}
 
     @ApiBearerAuth()
     @AccessBy(ClientType.USER)
@@ -63,6 +77,47 @@ export class UserController {
             return await this.userService.getAccessToken(userAuthDetail);
         } catch (error) {
             throw error;
+        }
+    }
+
+    @GrpcMethod('UserService', 'GetUserById')
+    @AccessBy(ServiceType.PRODUCT)
+    @UseGuards(MicroserviceGuard)
+    @UseInterceptors(GRpcTransformInterceptor)
+    async GetUserById(
+        payload: GrpcGetUserPayload,
+        metadata: Metadata,
+        call: ServerUnaryCall<any, any>,
+    ) {
+        try {
+            const userData = await this.userService.getUserById(payload.id);
+            return this.responseUtils.successResponse(userData);
+        } catch (error) {
+            console.error('User--Controller--GetUserById--Error', error);
+            return this.responseUtils.errorResponse(error);
+        }
+    }
+
+    @GrpcMethod('UserService', 'GetUserByKeycloakId')
+    @AccessBy(ServiceType.PRODUCT)
+    @UseGuards(MicroserviceGuard)
+    @UseInterceptors(GRpcTransformInterceptor)
+    async GetUserByKeycloakId(
+        payload: GrpcGetUserPayload,
+        metadata: Metadata,
+        call: ServerUnaryCall<any, any>,
+    ) {
+        try {
+            const userData = await this.userService.getUserByKeycloakId(
+                payload.id,
+            );
+            return this.responseUtils.successResponse(userData);
+        } catch (error) {
+            console.error(
+                'User--Controller--GetUserByKeycloakId--Error',
+                error,
+            );
+            return this.responseUtils.errorResponse(error);
         }
     }
 }

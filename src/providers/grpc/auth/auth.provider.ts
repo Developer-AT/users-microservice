@@ -41,7 +41,7 @@ export class AuthProvider implements OnModuleInit {
                 )
             );
             console.log('Auth--Service--validate--res', res);
-            return this.responseHandler.gRpcRsponseHandler(res);
+            return this.responseHandler.gRpcResponseHandler(res);
         } catch (error) {
             console.error('Auth--Service--validate--Error', error);
             throw error;
@@ -57,7 +57,7 @@ export class AuthProvider implements OnModuleInit {
                 )
             );
             console.log('Auth--Service--createUser--res', res);
-            return this.responseHandler.gRpcRsponseHandler(res);
+            return this.responseHandler.gRpcResponseHandler(res);
         } catch (error) {
             console.error('Auth--Service--createUser--Error', error);
             throw error;
@@ -79,7 +79,7 @@ export class AuthProvider implements OnModuleInit {
                     this.userService.GenerateToken(payload, this.metaData),
                 )
             );
-            return this.responseHandler.gRpcRsponseHandler(res);
+            return this.responseHandler.gRpcResponseHandler(res);
         } catch (error) {
             console.error('Auth--Service--generateToken--Error', error);
             throw error;
