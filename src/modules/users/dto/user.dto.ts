@@ -61,3 +61,7 @@ export class CreateUserOnMongoDto extends CreateUserDto {
     @IsString()
     keycloakId: string;
 }
+
+export interface GrpcGetUserPayload {
+    id: string;
+}

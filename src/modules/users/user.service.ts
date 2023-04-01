@@ -48,6 +48,10 @@ export class UserService {
         return user;
     }
 
+    async getUserByKeycloakId(keycloakId: string) {
+        return await this.userEntity.getUserByKeycloakId(keycloakId);
+    }
+
     async createUser(createUserDto: CreateUserDto) {
         const validateUserExistenceCriteria: ValidateUserExistence = {
             username: createUserDto.username,

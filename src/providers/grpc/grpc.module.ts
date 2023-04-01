@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { join } from 'path';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthProvider } from './auth/auth.provider';
-import { BookProvider } from './book/book.provider';
+import { ProductProvider } from './product/product.provider';
 import { JwtModule } from './../jwt/jwt.module';
 
 @Module({
@@ -21,19 +21,19 @@ import { JwtModule } from './../jwt/jwt.module';
                 },
             },
             {
-                name: 'BOOK_PACKAGE',
+                name: 'PRODUCT_PACKAGE',
                 transport: Transport.GRPC,
                 options: {
-                    package: process.env.PROTO_BOOK_PACKAGE,
-                    protoPath: join(__dirname, process.env.PROTO_BOOK_PATH),
-                    url: process.env.PROTO_BOOK_URL,
+                    package: process.env.PROTO_PRODUCT_PACKAGE,
+                    protoPath: join(__dirname, process.env.PROTO_PRODUCT_PATH),
+                    url: process.env.PROTO_PRODUCT_URL,
                 },
             },
         ]),
         JwtModule,
         UtilsModule,
     ],
-    providers: [AuthProvider, BookProvider],
-    exports: [AuthProvider, BookProvider],
+    providers: [AuthProvider, ProductProvider],
+    exports: [AuthProvider, ProductProvider],
 })
 export class GrpcModule {}

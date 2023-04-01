@@ -6,6 +6,8 @@ import { GrpcModule } from 'src/providers/grpc/grpc.module';
 import { RedisModule } from 'src/providers/redis/redis.module';
 import { EntityModule } from 'src/entity/entity.module';
 import { KafkaModule } from 'src/providers/kafka/kafka.module';
+import { JwtModule } from 'src/providers/jwt/jwt.module';
+import { UtilsModule } from 'src/providers/utils/utils.module';
 @Module({
     imports: [
         ConfigModule.forRoot(),
@@ -13,6 +15,8 @@ import { KafkaModule } from 'src/providers/kafka/kafka.module';
         RedisModule,
         EntityModule,
         KafkaModule,
+        JwtModule,
+        UtilsModule,
     ],
     controllers: [UserController],
     providers: [UserService],

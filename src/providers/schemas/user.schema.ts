@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { UserType } from 'src/interfaces/enums';
 
 export type UserDocument = User & Document;
 
@@ -39,6 +40,12 @@ export class User {
 
     @Prop({ type: Number })
     updatedAt: number;
+
+    @Prop({
+        type: String,
+        enum: [UserType.BASIC, UserType.AUTHOR],
+    })
+    userType: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

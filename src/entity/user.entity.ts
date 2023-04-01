@@ -23,6 +23,10 @@ export class UserEntity extends Dao {
         return await this.getDataById(userId);
     }
 
+    async getUserByKeycloakId(keycloakId: string) {
+        return await this.findOne({ keycloakId: keycloakId });
+    }
+
     async createUser(createUserDto: CreateUserOnMongoDto) {
         return await this.saveData(createUserDto);
     }
