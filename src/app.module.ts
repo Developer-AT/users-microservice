@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/users/user.module';
 import configuration from 'config/configuration';
 import { TestConsumer } from './test.consumer';
+import { KafkaModule } from './providers/kafka/kafka.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { TestConsumer } from './test.consumer';
             load: [configuration],
         }),
         UserModule,
+        KafkaModule
     ],
     controllers: [AppController],
     providers: [AppService, TestConsumer],

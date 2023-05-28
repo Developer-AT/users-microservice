@@ -36,11 +36,11 @@ export class UserController {
         private readonly responseUtils: ResponseUtilsProvider,
     ) {}
 
-    @ApiBearerAuth()
+    // @ApiBearerAuth()
     @AccessBy(ClientType.USER)
     @HavingRole(UserRole.BRONZE, UserRole.SILVER, UserRole.GOLD)
     @Get(':userId')
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     async getUserById(@Param('userId') userId: string) {
         return await this.userService.getUserById(userId);
     }

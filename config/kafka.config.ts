@@ -2,6 +2,7 @@ export default () => ({
     kafka: {
         broker1: process.env.KAFKA_BROKER_1,
         broker2: process.env.KAFKA_BROKER_2,
+        broker3: process.env.KAFKA_BROKER_3,
         clientId: process.env.KAFKA_CLIENT_ID,
         connectionRetry: 5,
         initialRetryTime: 100,

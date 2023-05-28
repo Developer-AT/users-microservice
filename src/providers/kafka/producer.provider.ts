@@ -15,6 +15,7 @@ export class KafkaProducerProvider implements IProducer {
             brokers: [
                 this.config.get<string>('kafka.broker1'),
                 this.config.get<string>('kafka.broker2'),
+                this.config.get<string>('kafka.broker3'),
             ],
             retry: {
                 initialRetryTime: this.config.get<number>(
