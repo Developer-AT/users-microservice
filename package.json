@@ -30,6 +30,7 @@
     "@nestjs/mongoose": "^9.0.2",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.2.0",
+    "async-retry": "^1.3.3",
     "cache-manager": "^3.6.0",
     "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.5.1",

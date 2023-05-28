@@ -9,6 +9,7 @@ import {
     Delete,
     Get,
     Param,
+    Patch,
     Post,
     Put,
     UseGuards,
@@ -52,7 +53,7 @@ export class UserController {
     @ApiBearerAuth()
     @AccessBy(ClientType.USER)
     @HavingRole(UserRole.BRONZE, UserRole.SILVER, UserRole.GOLD)
-    @Put(':userId')
+    @Patch(':userId')
     async updateUserById(
         @Param('userId') userId: string,
         @Body(new ValidationPipe()) updateUserDto: UpdateUserDto,
